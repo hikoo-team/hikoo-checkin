@@ -28,6 +28,7 @@ input {
   border-style: solid;
   border-radius: 18px;
   color: white;
+  cursor: pointer;
 }
 
 input:focus,
@@ -36,11 +37,37 @@ select:focus {
   outline: none;
 }
 
+// video {
+//   position: fixed !important;
+//   visibility: hidden !important;
+//   transform: scaleX(-1) !important;
+//   top: 9px !important;
+//   left: 8px !important;
+//   width: 346.25px !important;
+// }
+
+canvas {
+  max-width: 300px !important;
+}
+
 video {
-  position: fixed !important;
-  visibility: hidden !important;
-  transform: scaleX(-1) !important;
-  top: 9px !important;
-  left: 8px !important;
-  width: 346.25px !important;
+  left: initial !important;
+  top: initial !important;
+  position: absolute !important;
+  max-width: 300px !important;
+  max-height: 300px !important;
+}
+
+#loadingDiv {
+  left: initial !important;
+  top: initial !important;
+  position: relative !important;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }

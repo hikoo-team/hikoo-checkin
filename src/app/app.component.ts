@@ -1,5 +1,6 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-import { AppService, AccountDto } from './app.service';
+import { Component, ViewChild, ElementRef, OnInit, NgZone } from '@angular/core';
+import { AppService, AccountDto, AuthMeResponse } from './app.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +10,14 @@ import { AppService, AccountDto } from './app.service';
 export class AppComponent implements OnInit {
   @ViewChild('authInstance') authInstance: ElementRef;
 
-  email = '';
+  email = 'tonylin@gmail.com';
   user: AccountDto | null = null;
   imageLoaded = false;
 
   constructor(
-    private app: AppService
+    private app: AppService,
+    private snackBar: MatSnackBar,
+    private zone: NgZone
   ) {
   }
 
@@ -39,7 +42,37 @@ export class AppComponent implements OnInit {
     });
   }
 
-  onValidationFinsihed(r) {
-    console.log(r);
+  onValidationFinsihed(r: AuthMeResponse) {
+    this.zone.run(() => {
+      if (!r.success) {
+        const { code, message } = r.error;
+        this.showFailed(`Authentication failed with code ${code} - ${message}`);
+        return;
+      }
+
+      const { isLiveness, samePersion } = r.result;
+
+      if (!isLiveness) {
+        this.showFailed(`Authentication failed - not a real person`);
+        return;
+      }
+
+      // if (!samePersion) {
+      //   this.showFailed(`Authentication failed - not the same person`);
+      //   return;
+      // }
+
+      this.showFailed(`Authentication success, checking in`);
+    });
+  }
+
+  onRetryClick() {
+    window.location.reload();
+  }
+
+  showFailed(message: string) {
+    this.snackBar.open(message, 'Retry', { duration: 2000 }).onAction().subscribe(() => {
+      this.onRetryClick();
+    });
   }
 }

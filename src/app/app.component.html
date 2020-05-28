@@ -9,6 +9,7 @@
     </div>
     <div class="button-container">
       <div class="button" (click)="onSearchClick()">search</div>
+      <div *ngIf="imageLoaded" class="button" (click)="onRetryClick()" style="margin-left: 8px;">retry</div>
     </div>
   </div>
 
@@ -19,9 +20,11 @@
     </div>
     <div>
       <div *ngIf="imageLoaded">
-        {{ user.username }}
+        {{ user.firstName }} {{ user.lastName }}
       </div>
     </div>
   </div>
-  <div #authInstance id="instance"></div>
+  <div class="instance-container">
+    <div #authInstance id="instance"></div>
+  </div>
 </div>

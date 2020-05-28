@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 
+export class HikooResponse {
+  success: boolean;
+  errorMessage?: string;
+}
+
 export class AccountDto {
   id: number;
   username: string;
@@ -24,6 +29,31 @@ export class AccountDto {
   fcmToken: string;
 }
 
+
+export class CheckinDto {
+  id: number;
+  hikerId: number;
+  hikeId: number;
+  permitName: string;
+  checkinTime: number;
+}
+
+export class AuthMeResponseResult {
+  isLiveness: boolean;
+  samePersion: boolean;
+}
+
+export class AuthMeError {
+  code: number;
+  message: string;
+}
+
+export class AuthMeResponse {
+  success: boolean;
+  result?: AuthMeResponseResult;
+  error?: AuthMeError;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,5 +65,9 @@ export class AppService {
 
   getUser(userEmail: string) {
     return this.http.get<AccountDto>(`/api/accounts/withemail/${userEmail}`);
+  }
+
+  checkin(checkin: CheckinDto) {
+    return this.http.post<HikooResponse>('/api/checkin', checkin);
   }
 }

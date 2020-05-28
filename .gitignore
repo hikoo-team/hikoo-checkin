@@ -44,3 +44,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# hikoo.proxy.conf.json
+hikoo.proxy.conf.json

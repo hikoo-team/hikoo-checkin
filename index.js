@@ -1,14 +1,30 @@
 'use strict';
+
 const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
-const bodyParser = require('body-parser');
-const port = 8888;
 
-app.use(express.static('static'));
-app.use(bodyParser.json({ type: 'application/json' }));
+const proxyConf = require('./hikoo.proxy.conf.json');
 
-// app.post('/', (req, res) => {
+const port = 8080;
 
-// });
+app.use(express.static('dist/hikoo-checkin'));
+app.use(
+  '/model',
+  createProxyMiddleware({
+    target: "https://authme.com/aws-hackathon",
+    changeOrigin: true,
+  })
+);
+app.use(
+  '/api',
+  createProxyMiddleware({
+    target: proxyConf.url,
+    changeOrigin: true,
+    pathRewrite: {
+      '^/api': '/',
+    },
+  })
+);
 
-app.listen(port, () => console.log(`Hikoo Checkin App on http://localhost:${port}`));
+app.listen(port, () => console.log(`Hikoo Checkin on http://localhost:${port}`));
