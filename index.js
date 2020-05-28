@@ -27,4 +27,4 @@ app.use(
   })
 );
 
-app.listen(port, () => console.log(`Hikoo Checkin on http://localhost:${port}`));
+app.listen(port, () => console.log(`Hikoo Checkin on http://0.0.0.0:${port}`));
