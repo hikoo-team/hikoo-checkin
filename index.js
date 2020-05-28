@@ -6,7 +6,7 @@ const app = express();
 
 const proxyConf = require('./hikoo.proxy.conf.json');
 
-const port = 8080;
+const port = 80;
 
 app.use(express.static('dist/hikoo-checkin'));
 app.use(
