@@ -29,13 +29,57 @@ export class AccountDto {
   fcmToken: string;
 }
 
+export class PermitInfoDto {
+  hikerId: number;
+  hikeStart: number;
+  hikeEnd: number;
+  permitId: number;
+  guideName: string;
+  guideContact: string;
+  guideContact2: string;
+  permitAccepted: string;
+  acceptedTime: number;
+  memo: string;
+  hikeStarted: boolean;
+  hikeFinished: boolean;
+  hikeCancelled: boolean;
+  constructor(hikerId: number, hikeStart: number, hikeEnd:number, permitId: number, 
+    guideName: string, guideContact: string, guideContact2: string, permitAccepted: string, 
+    acceptedTime: number ,memo :string, hikeStarted: boolean, hikeFinished: boolean, hikeCancelled: boolean) {
+      this.hikerId = hikerId;
+      this.hikeStart = hikeStart;
+      this.hikeEnd = hikeEnd;
+      this.permitId = permitId;
+      this.guideName = guideName;
+      this.guideContact = guideContact;
+      this.guideContact2 = guideContact2;
+      this.permitAccepted = permitAccepted;
+      this.acceptedTime = acceptedTime;
+      this.memo = memo;
+      this.hikeStarted = hikeStarted;
+      this.hikeFinished = hikeFinished;
+      this.hikeCancelled = hikeCancelled;
+  }
+}
 
 export class CheckinDto {
-  id: number;
   hikerId: number;
   hikeId: number;
-  permitName: string;
-  checkinTime: number;
+  constructor(hikerId :number, hikeId: number) {
+    this.hikerId = hikerId;
+    this.hikeId = hikeId;
+  }
+}
+
+export class UpdateHikeDto {
+  hikeId: number;
+  permitAccepted: string;
+  acceptTime: number;
+  constructor(hikeId :number, permitAccepted: string, acceptTime: number) {
+    this.hikeId = hikeId;
+    this.permitAccepted = permitAccepted;
+    this.acceptTime = acceptTime;
+  }
 }
 
 export class AuthMeResponseResult {
@@ -63,6 +107,12 @@ export class AppService {
     private http: HttpClient
   ) { }
 
+  addPermit(permitInfo: PermitInfoDto) {
+    console.log(permitInfo)
+    // return this.http.get<AccountDto>(`/api/accounts`);
+    return this.http.post<HikooResponse>('/api/hikes', permitInfo);
+  }
+
   getUser(userEmail: string) {
     return this.http.get<AccountDto>(`/api/accounts/withemail/${userEmail}`);
   }
@@ -70,4 +120,13 @@ export class AppService {
   checkin(checkin: CheckinDto) {
     return this.http.post<HikooResponse>('/api/checkin', checkin);
   }
+
+  getHike(hikerId: number) {
+    return this.http.get<AccountDto>(`/api/hikes/byHikerId/${hikerId}`);
+  }
+
+  updateHikeStatus(hike: UpdateHikeDto) {
+    return this.http.put<HikooResponse>(`/api/hikes/acceptHike/${hike.hikeId}`, hike)
+  }
+
 }

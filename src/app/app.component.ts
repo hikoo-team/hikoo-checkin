@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, OnInit, NgZone } from '@angular/core';
-import { AppService, AccountDto, AuthMeResponse } from './app.service';
+import { AppService, AccountDto, AuthMeResponse, PermitInfoDto, CheckinDto, UpdateHikeDto } from './app.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -29,6 +29,49 @@ export class AppComponent implements OnInit {
     this.app.getUser(this.email).subscribe((user) => {
       this.user = user;
     }, console.log);
+  }
+
+  onCheckIn() {
+    console.log(`check-in`);
+    this.app.getUser(this.email).subscribe((user) => {
+      this.app.getHike(user.id).subscribe((hikeInfo) => {
+        // console.log(`check-in = `, user.email, `hike = `, hikeInfo.id);
+        const updateHike = new UpdateHikeDto(hikeInfo.id, "ACCEPTED", new Date().getTime())
+        this.app.updateHikeStatus(updateHike).subscribe((result) => {
+          const checkin = new CheckinDto(user.id, hikeInfo.id)
+          this.app.checkin(checkin).subscribe((result) => {
+          //  console.log(`result = `, result);
+          });
+        });
+      }); 
+    });
+  }
+
+  onAddPermit() {
+    console.log(`add permit info`);
+    const startTime = new Date().getTime();
+    const endTime = new Date().getTime() + 28800000;
+    this.app.getUser(this.email).subscribe((user) => {
+      console.log(`add permit from =` + user.id );
+      const permitInfo = new PermitInfoDto(
+        Number(user.id),
+        startTime, 
+        endTime,
+        1,
+        "GuideName",
+        "GuideContact",
+        "GuideContact2",
+        "PENDING",
+        startTime,
+        "This is testing",
+        false,
+        false,
+        false
+      );
+      this.app.addPermit(permitInfo).subscribe((result) => {
+        console.log(`Insert permit data , result = `, result)
+      });
+    })
   }
 
   onImageLoad() {
