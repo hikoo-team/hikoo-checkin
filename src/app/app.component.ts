@@ -32,15 +32,14 @@ export class AppComponent implements OnInit {
   }
 
   onCheckIn() {
-    console.log(`check-in`);
     this.app.getUser(this.email).subscribe((user) => {
       this.app.getHike(user.id).subscribe((hikeInfo) => {
-        // console.log(`check-in = `, user.email, `hike = `, hikeInfo.id);
         const updateHike = new UpdateHikeDto(hikeInfo.id, "ACCEPTED", new Date().getTime())
         this.app.updateHikeStatus(updateHike).subscribe((result) => {
-          const checkin = new CheckinDto(user.id, hikeInfo.id)
+          console.log(`update permit, hikeId = `, updateHike.hikeId)
+          const checkin = new CheckinDto(user.id, hikeInfo.id, user.fcmToken);
           this.app.checkin(checkin).subscribe((result) => {
-          //  console.log(`result = `, result);
+            console.log(`checkin result = `, result.success);
           });
         });
       }); 

@@ -65,9 +65,11 @@ export class PermitInfoDto {
 export class CheckinDto {
   hikerId: number;
   hikeId: number;
-  constructor(hikerId :number, hikeId: number) {
+  fcmToken: string;
+  constructor(hikerId :number, hikeId: number, fcmToken: string) {
     this.hikerId = hikerId;
     this.hikeId = hikeId;
+    this.fcmToken = fcmToken;
   }
 }
 
